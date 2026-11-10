@@ -1,10 +1,26 @@
 # USB 继电器控制面板 · 精简版
 
-Windows 64 位便携式 USB HID 继电器控制面板。下载解压后运行 `USBRelayPanel.exe`，无需安装 Python、Qt 或原厂 DLL。
+USB HID 继电器控制面板，提供独立单网页与 Windows 64 位便携 EXE 两种版本。
 
 [下载最新便携版](https://github.com/ybyllc/usb-relay-panel/releases/latest)
 
-## 界面示意
+## 单网页版本
+
+[在线打开网页面板](https://ybyllc.github.io/usb-relay-panel/) · [下载独立 HTML](https://github.com/ybyllc/usb-relay-panel/releases/download/v2026.11.09-compact/USBRelayPanel-web.html) · [网页使用说明](网页使用说明.md)
+
+使用 Chrome / Edge 打开，点击“连接设备”并授权 USBRelay。所有资源内嵌，无需后台服务、Python、原厂 DLL 或联网加载依赖。
+
+- 桌面约 120% 尺寸，窄窗口自动适配，已检查 320–1280 像素宽度。
+- 支持单路 / 全部开关、常开 / 常闭、通道命名、多选循环定时。
+- 修复首次授权后设备列表不更新，连接后显示设备型号及编号。
+- 兼容 8 字节有效载荷和 9 字节带报告 ID 的返回。
+- 名称与模式保存在当前浏览器，退出保持输出。后台页面或休眠可能影响定时；切入后台时停止循环。
+
+已用本机 Edge 实际连接 USBRelay4 / RLY04 并读取状态，全程未尝试发送开关命令；30 项模拟测试通过，尚未验证网页物理开关。
+
+![网页面板布局示意（模拟设备）](images/web-panel.png)
+
+## Windows 便携版界面
 
 ![USB 继电器控制面板精简版](images/panel.png)
 
@@ -33,4 +49,4 @@ Windows 64 位便携式 USB HID 继电器控制面板。下载解压后运行 `U
 
 本次精简版通过 54 项自动化测试；打包程序启动检查识别 USBRelay4，未报告错误。验证过程中未执行真实继电器切换。
 
-本仓库提供便携程序发布与使用说明。
+本仓库提供独立网页、便携程序发布与使用说明。

@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>USB 继电器控制面板</title>
+<style>
+:root{color-scheme:light;--bg:#f8fafc;--surface:#fff;--text:#17212f;--muted:#52627a;--border:#dce3eb;--blue:#2563eb;--blue-pale:#e8f1ff;--green:#15803d;--green-pale:#e8f7ee;--red:#b91c1c;--red-pale:#feeeee;--radius:0.5714rem;--gap:0.5714rem;font:16.8px/1.5 "Microsoft YaHei UI","Microsoft YaHei",system-ui,sans-serif;color:var(--text);background:var(--bg)}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit;color:inherit}button,input,select,summary{border-radius:var(--radius)}button{cursor:pointer;border:1px solid var(--border);background:var(--surface);padding:0.5rem 0.8571rem;font-weight:600;white-space:nowrap}button:hover{background:#e9edf2}button:disabled{cursor:default;opacity:.45}input,select{border:1px solid var(--border);background:var(--surface);padding:0.4286rem 0.5714rem;min-width:0;caret-color:var(--blue)}input::placeholder{color:var(--muted)}:focus-visible{outline:0.1429rem solid var(--blue);outline-offset:0.2143rem}::selection{background:#dbeafe}svg{width:1rem;height:1rem;vertical-align:-0.1429rem;fill:currentColor;margin-right:0.3571rem}.on{background:var(--green);color:white;border-color:var(--green)}.on:hover{background:#166534}.off{background:var(--red);color:white;border-color:var(--red)}.off:hover{background:#991b1b}.soft-off{background:var(--red-pale);color:var(--red);border-color:transparent}.primary{background:var(--blue);color:white;border-color:var(--blue)}.primary:hover{background:#1d4ed8}
+.app{max-width:47.1429rem;margin:1.7143rem auto;border:1px solid var(--border);border-radius:0.8571rem;overflow:hidden;background:var(--bg)}header{padding:1rem 1.1429rem 0.7143rem;border-bottom:1px solid var(--border);background:var(--surface)}h1{font-size:1.1429rem;margin:0 0 0.8571rem;font-weight:700}.toolbar{display:flex;align-items:center;gap:var(--gap);flex-wrap:wrap}.toolbar select{flex:1;max-width:17.1429rem}.badge{font-size:0.8571rem;color:var(--muted);background:#eef0f3;border-radius:1.1429rem;padding:0.4286rem 0.7143rem;white-space:nowrap}.badge.connected{color:var(--green);background:var(--green-pale)}.badge.error{color:var(--red);background:var(--red-pale)}main{padding:1.1429rem}.all{display:flex;gap:0.8571rem;align-items:center;flex-wrap:wrap;margin-bottom:1.1429rem}.all>button{flex:1;padding:0.6429rem 0.8571rem}.mode{display:flex;align-items:center;gap:0.5rem;margin-left:auto;white-space:nowrap;font-size:0.8571rem}.switch{width:2.8571rem;height:1.7143rem;border:0;padding:0;border-radius:1rem;background:#6b7280;position:relative}.switch:hover{background:#52627a}.switch::after{content:"";position:absolute;width:1.2857rem;height:1.2857rem;top:0.2143rem;left:0.2143rem;border-radius:50%;background:white;transition:transform .14s ease-out}.switch[aria-checked=true]{background:var(--blue)}.switch[aria-checked=true]::after{transform:translateX(1.1429rem)}
+.rows{display:grid;gap:0.8571rem}.row{display:grid;grid-template-columns:3.4286rem minmax(5rem,1fr) 10.1429rem 4.8571rem 4.8571rem;gap:var(--gap);align-items:center}.number{font-weight:600}.state{border-radius:1.2857rem;background:#eef0f3;color:var(--muted);text-align:center;padding:0.5rem 0.2857rem;font-size:0.9286rem;font-weight:600;white-space:nowrap}.state.on-state{color:var(--green);background:var(--green-pale)}.state.off-state{color:var(--red);background:var(--red-pale)}.row button{padding:0.4286rem}.empty{text-align:center;padding:2.5714rem 0.8571rem;color:var(--muted)}.empty p{margin:0 0 1.1429rem}.empty strong{display:block;color:var(--text);font-size:1.1429rem;margin-bottom:0.5714rem}.notice{margin:0 0 0.8571rem;padding:0.7143rem 0.8571rem;background:var(--red-pale);color:var(--red);border-radius:var(--radius)}[hidden]{display:none!important}
+details{margin-top:1.2857rem;background:#f6faff;border:1px solid #cfe0f5;border-radius:var(--radius);overflow:hidden}summary{background:var(--blue-pale);padding:0.5714rem 0.8571rem;font-weight:700;cursor:pointer}.timer{padding:0.8571rem;display:grid;gap:0.8571rem}.channels{display:flex;flex-wrap:wrap;gap:0.7143rem 1.2857rem}.channels label{display:flex;align-items:center;gap:0.3571rem}.channels input{accent-color:var(--blue);width:1.1429rem;height:1.1429rem}.parameters{display:flex;gap:0.8571rem;flex-wrap:wrap}.parameters label{display:flex;align-items:center;gap:0.3571rem}.parameters input{width:5rem;font-variant-numeric:tabular-nums}.timer-actions{display:flex;gap:var(--gap);align-items:center;flex-wrap:wrap}.timer-actions output{font-size:0.8571rem;color:var(--muted);font-variant-numeric:tabular-nums}.help{font-size:0.8571rem;color:var(--muted);margin:0}footer{padding:0.7143rem 1.1429rem;border-top:1px solid var(--border)}.log{height:6rem;overflow:auto;border:1px solid var(--border);border-radius:var(--radius);padding:0.5rem 0.7143rem;background:var(--surface);font-size:0.8571rem;font-variant-numeric:tabular-nums;scrollbar-color:#cbd5e1 var(--surface);scrollbar-width:thin}.log p{margin:0}.log .error{color:var(--red)}.footnote{display:flex;justify-content:space-between;gap:0.5714rem;color:var(--muted);font-size:0.7857rem;margin-top:0.3571rem}.device-info{font-size:0.8571rem;color:var(--muted);margin-top:0.5714rem;min-height:1.2857rem;overflow-wrap:anywhere}
+@media(max-width:740px){:root{font-size:16px}.row{grid-template-columns:42px minmax(0,1fr) 64px 64px!important;gap:6px!important}.row .state{font-size:14px}.row button{min-height:44px}.app{margin:0;border:0;border-radius:0;min-height:100vh}main,header,footer{padding-left:0.8571rem;padding-right:0.8571rem}.row{grid-template-columns:3.2857rem minmax(4.2857rem,1fr) 4.8571rem 4.8571rem;gap:0.5rem}.row .state{grid-column:2;grid-row:2}.row .name{grid-column:2}.row .number{grid-row:1 / 3}.row .on{grid-column:3;grid-row:1 / 3}.row .off{grid-column:4;grid-row:1 / 3}.rows{gap:1.1429rem}.mode{flex-basis:100%;justify-content:flex-end}.all{gap:0.5714rem}.toolbar{gap:0.4286rem}.toolbar select{max-width:none;width:10rem}.footnote{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.switch::after{transition:none}}
+</style>
+</head>
+<body>
+<svg hidden aria-hidden="true"><symbol id="play" viewBox="0 0 16 16"><path d="M4 2 14 8 4 14Z"/></symbol><symbol id="stop" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="1"/></symbol></svg>
+<div class="app">
+<header><h1>USB 继电器控制面板</h1><div class="toolbar">
+<select id="devices" aria-label="已授权设备"><option value="">尚未授权设备</option></select>
+<button id="connect" class="primary">连接设备</button><button id="authorize" aria-label="授权另一台 USB 继电器">添加</button><button id="refresh" disabled>刷新</button><span id="badge" class="badge" role="status">未连接</span>
+</div><div id="device-info" class="device-info"></div></header>
+<main><p id="notice" class="notice" role="alert" hidden></p>
+<div class="all"><button id="all-on" class="on" disabled><svg aria-hidden="true"><use href="#play"/></svg>全部开启</button><button id="all-off" class="soft-off" disabled><svg aria-hidden="true"><use href="#stop"/></svg>全部关闭</button><div class="mode"><span>常开</span><button id="mode" class="switch" role="switch" aria-label="常闭负载模式" aria-checked="false"></button><span>常闭</span></div></div>
+<div id="empty" class="empty"><strong>连接 USB 继电器</strong><p>首次使用请点击“连接设备”，在浏览器中选择继电器。</p><p class="help">支持 Chrome / Edge，USBRelay1 / 2 / 4 / 8。</p></div>
+<div id="rows" class="rows"></div>
+<details id="cycle-box"><summary>循环定时</summary><div class="timer"><div id="channels" class="channels"></div><div class="parameters"><label>开启：<input id="on-time" type="number" min="0.2" max="86400" step="0.1" value="2" aria-label="开启秒数">秒</label><label>关闭：<input id="off-time" type="number" min="0.2" max="86400" step="0.1" value="3" aria-label="关闭秒数">秒</label><label>次数：<input id="count" type="number" min="0" max="1000000" step="1" value="10"></label></div><div class="timer-actions"><button id="start" class="on" disabled><svg aria-hidden="true"><use href="#play"/></svg>开始</button><button id="stop-cycle" class="off" disabled><svg aria-hidden="true"><use href="#stop"/></svg>停止</button><output id="cycle-state" aria-live="polite">未运行</output></div><p class="help">0 次为无限循环。停止保留当前输出；后台标签页或休眠可能延迟定时。</p></div></details>
+</main><footer><div id="log" class="log" role="log" aria-label="操作记录" aria-live="polite"></div><div class="footnote"><span>断开或关闭网页保持当前输出</span><span>名称与模式保存在当前浏览器</span></div></footer>
+</div>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const KEY = 'usb-relay.web.v1';
+function decodeReport(view, channels) {
+  const raw = new Uint8Array(view.buffer, view.byteOffset, view.byteLength);
+  const bytes = raw.length === 8 ? Uint8Array.of(0, ...raw) : raw;
+  if (bytes.length !== 9 || bytes[0] !== 0) throw new Error('设备报告格式不符（收到 '+raw.length+' 字节：'+Array.from(raw,n=>n.toString(16).padStart(2,'0')).join(' ')+'），已停止控制');
+  const status = (bytes[7] << 4) | bytes[8];
+  if (status & ~((1 << channels) - 1)) throw new Error('设备回读状态超出通道范围');
+  const serial = Array.from(bytes.slice(1, 6), n => n.toString(16).padStart(2, '0')).join('');
+  const label = Array.from(bytes.slice(1, 6), n => n >= 32 && n <= 126 ? String.fromCharCode(n) : '').join('') || '空编号';
+  return {serial, label, status};
+}
+function switchReport(channels, channel, enabled) {
+  if (![1, 2, 4, 8].includes(channels) || typeof enabled !== 'boolean' || (channel !== null && (!Number.isInteger(channel) || channel < 1 || channel > channels))) throw new Error('开关参数无效');
+  return Uint8Array.of(channel === null ? (enabled ? 0xfe : 0xfc) : (enabled ? 0xff : 0xfd), channel ?? 0, 0, 0, 0, 0, 0, 0);
+}
+class Relay {
+  constructor(device) { this.device = device; this.serial = null; this.nextWrite = 0; this.active = false; }
+  async open() {
+    const d = this.device;
+    if (d.vendorId !== 0x16c0 || d.productId !== 0x05df || !/^USBRelay[1248]$/.test(d.productName)) throw new Error('设备型号不匹配');
+    this.channels = Number(d.productName.slice(-1));
+    const collections = list => list.flatMap(c => [c, ...collections(c.children || [])]);
+    const reports = collections(d.collections).filter(c => c.usagePage === 0xff00).flatMap(c => c.featureReports || []);
+    if (!reports.some(r => r.reportId === 0 && r.items.reduce((n, i) => n + i.reportSize * i.reportCount, 0) === 64)) throw new Error('设备 HID Feature 描述不符合预期');
+    await d.open();
+    this.active = true;
+    return this.read();
+  }
+  async read() {
+    if (!this.active) throw new Error('连接已关闭');
+    const view = await this.device.receiveFeatureReport(0);
+    if (!this.active) throw new Error('连接已关闭');
+    const r = decodeReport(view, this.channels);
+    if (this.serial !== null && this.serial !== r.serial) throw new Error('设备编号发生变化，请重新连接');
+    this.serial = r.serial;
+    return r;
+  }
+  async switch(channel, enabled) {
+    const packet = switchReport(this.channels, channel, enabled);
+    await sleep(Math.max(0, this.nextWrite - performance.now()));
+    const before = await this.read();
+    const mask = channel === null ? (1 << this.channels) - 1 : 1 << (channel - 1);
+    const expected = enabled ? before.status | mask : before.status & ~mask;
+    try { await this.device.sendFeatureReport(0, packet); }
+    finally { this.nextWrite = performance.now() + 200; }
+    await sleep(50);
+    const after = await this.read();
+    if (after.status !== expected) throw new Error('命令已发送，回读不一致；输出状态未知，不自动重发');
+    return after;
+  }
+  async close() { this.active = false; if (this.device.opened) await this.device.close(); }
+}
+let preferences = {closed:false, names:{}};
+let storageAvailable = true;
+try {
+  const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+  if (saved && typeof saved.closed === 'boolean' && saved.names && typeof saved.names === 'object' && !Array.isArray(saved.names)) preferences = saved;
+} catch { storageAvailable = false; }
+const state = {relay:null, report:null, devices:[], busy:false, cycle:null, generation:0};
+function log(message, error=false) {
+  const p = document.createElement('p'); p.textContent = new Date().toLocaleTimeString('zh-CN', {hour12:false}) + '  ' + message;
+  p.classList.toggle('error', error); $('log').append(p);
+  while ($('log').children.length > 200) $('log').firstElementChild.remove();
+  $('log').scrollTop = $('log').scrollHeight;
+}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(preferences)); }
+  catch { log('无法保存本地设置，本次更改仅在当前页面有效', true); }
+}
+function deviceKey() { return state.relay.device.productName + '|' + state.report.serial; }
+function controls() {
+  const connected = Boolean(state.relay && state.report);
+  const locked = state.busy || Boolean(state.cycle);
+  for (const id of ['all-on','all-off','start','refresh']) $(id).disabled = !connected || locked;
+  $('mode').disabled = locked;
+  $('connect').disabled = locked || !('hid' in navigator);
+  $('devices').disabled = connected || locked;
+  $('authorize').disabled = connected || locked || !('hid' in navigator);
+  $('connect').textContent = connected ? '断开' : '连接设备';
+  $('stop-cycle').disabled = !state.cycle || state.cycle.cancelled;
+  for (const el of document.querySelectorAll('.row button,.row input,.timer input')) el.disabled = !connected || locked;
+}
+function showStatus(report) {
+  state.report = report;
+  for (const row of $('rows').children) {
+    const energized = Boolean(report.status & (1 << (Number(row.dataset.channel) - 1)));
+    const on = energized !== preferences.closed;
+    const label = row.querySelector('.state');
+    label.className = 'state ' + (on ? 'on-state' : 'off-state');
+    label.textContent = (on ? '已开启' : '已关闭') + ' / ' + (energized ? '吸合' : '释放');
+  }
+  $('device-info').textContent = state.relay.device.productName + ' · 编号 ' + report.label + ' · ' + state.relay.channels + ' 通道';
+}
+function renderChannels() {
+  $('rows').replaceChildren(); $('channels').replaceChildren();
+  const names = preferences.names[deviceKey()] || [];
+  for (let n=1; n<=state.relay.channels; n++) {
+    const row = document.createElement('div'); row.className='row'; row.dataset.channel=n;
+    const label = document.createElement('label'); label.className='number'; label.htmlFor='name-'+n; label.textContent='通道 '+n;
+    const input = document.createElement('input'); input.id='name-'+n; input.className='name'; input.maxLength=80; input.placeholder='通道 '+n; input.value=typeof names[n-1] === 'string' ? names[n-1].slice(0,80) : '';
+    input.addEventListener('change', () => { const key=deviceKey(); const values=Array.isArray(preferences.names[key]) ? preferences.names[key] : []; values[n-1]=input.value; preferences.names[key]=values; save(); });
+    const status=document.createElement('span'); status.className='state'; status.textContent='状态未知';
+    row.append(label,input,status);
+    for (const [enabled,css,text] of [[true,'on','开启'],[false,'off','关闭']]) { const b=document.createElement('button'); b.className=css; b.textContent=text; b.setAttribute('aria-label','通道 '+n+text); b.onclick=()=>manual(n,enabled); row.append(b); }
+    $('rows').append(row);
+    const checkLabel=document.createElement('label'); const check=document.createElement('input'); check.type='checkbox'; check.value=n; checkLabel.append(check,document.createTextNode('通道 '+n)); $('channels').append(checkLabel);
+  }
+}
+async function fault(error) {
+  const r=state.relay; state.generation++; if(state.cycle) state.cycle.cancelled=true; state.cycle=null; state.relay=null; state.report=null;
+  $('badge').className='badge error'; $('badge').textContent='已断开'; $('notice').hidden=false;
+  $('notice').textContent=error.message+'。当前输出状态未知，请检查后重新连接。';
+  for(const label of document.querySelectorAll('.state')) { label.className='state'; label.textContent='状态未知'; }
+  $('cycle-state').textContent='已停止'; controls(); log(error.message,true);
+  if(r) { try { await r.close(); } catch {} }
+}
+async function busy(action) {
+  if(state.busy) return;
+  state.busy=true; controls();
+  try { await action(); } catch(error) { await fault(error); }
+  finally { state.busy=false; controls(); }
+}
+function showDeviceOptions(selected=null) {
+  $('devices').replaceChildren();
+  if(!state.devices.length) $('devices').add(new Option('尚未授权设备',''));
+  state.devices.forEach((d,i)=>{
+    const label=d===state.relay?.device && state.report ? d.productName+' / '+state.report.label : d.productName+' · '+(i+1);
+    $('devices').add(new Option(label,String(i)));
+  });
+  const index=state.devices.indexOf(selected);
+  if(index>=0) $('devices').value=String(index);
+}
+async function listDevices() {
+  const selected=state.devices[Number($('devices').value)];
+  state.devices=(await navigator.hid.getDevices()).filter(d=>d.vendorId===0x16c0 && d.productId===0x05df);
+  showDeviceOptions(selected);
+}
+async function connect() {
+  if(state.busy || state.cycle) return;
+  if(state.relay) { await busy(async()=>{ await state.relay.close(); state.relay=null; state.report=null; state.generation++; $('rows').replaceChildren(); $('channels').replaceChildren(); $('empty').hidden=false; $('badge').className='badge'; $('badge').textContent='未连接'; $('device-info').textContent=''; log('已断开，保持当前输出'); }); return; }
+  await busy(async()=>{
+    let device=state.devices[Number($('devices').value)];
+    if(!device) { const chosen=await navigator.hid.requestDevice({filters:[{vendorId:0x16c0,productId:0x05df}]}); device=chosen[0]; if(!device) {log('已取消选择设备'); return;} }
+    const relay=new Relay(device); state.relay=relay;
+    const report=await relay.open(); state.report=report; renderChannels(); showStatus(report);
+    if(!state.devices.includes(device)) state.devices.push(device);
+    showDeviceOptions(device);
+    $('empty').hidden=true; $('notice').hidden=true; $('badge').className='badge connected'; $('badge').textContent='已连接';
+    log('已连接 '+device.productName+' / '+report.label+'，状态已回读');
+  });
+}
+async function manual(channel,enabled) {
+  if(!state.relay || state.busy || state.cycle) return;
+  await busy(async()=>{ showStatus(await state.relay.switch(channel,enabled !== preferences.closed)); log((channel===null ? '全部通道' : '通道 '+channel)+(enabled ? '已开启' : '已关闭')+'，回读一致'); });
+}
+function stopCycle() { if(state.cycle) { state.cycle.cancelled=true; $('cycle-state').textContent='正在停止，保持当前输出'; controls(); } }
+async function startCycle() {
+  if(!state.relay || state.busy || state.cycle) return;
+  const selected=Array.from($('channels').querySelectorAll('input:checked'),el=>Number(el.value));
+  const on=Number($('on-time').value), off=Number($('off-time').value), count=Number($('count').value);
+  if(!selected.length || !Number.isFinite(on) || !Number.isFinite(off) || on<.2 || off<.2 || on>86400 || off>86400 || !Number.isInteger(count) || count<0 || count>1000000) { log('请选择通道，并填写有效时间（0.2–86400 秒）和次数（0–1000000）',true); return; }
+  const token={cancelled:false,generation:state.generation}; state.cycle=token; controls(); log('循环开始：通道 '+selected.join('、'));
+  const live=()=>!token.cancelled && token.generation===state.generation && state.relay;
+  let round=0;
+  try {
+    while(live() && (count===0 || round<count)) {
+      for(const [enabled,seconds] of [[true,on],[false,off]]) {
+        for(const channel of selected) { if(!live()) break; showStatus(await state.relay.switch(channel,enabled !== preferences.closed)); }
+        if(!live()) break;
+        const until=performance.now()+seconds*1000;
+        while(live() && performance.now()<until) { $('cycle-state').textContent='第 '+(round+1)+' / '+(count||'无限')+' 轮 · '+(enabled?'开启':'关闭')+' '+Math.max(0,(until-performance.now())/1000).toFixed(1)+' 秒'; await sleep(Math.min(100,Math.max(0,until-performance.now()))); }
+        if(!live()) break;
+      }
+      if(live()) round++;
+    }
+    if(token.generation===state.generation) { $('cycle-state').textContent=token.cancelled ? '已停止，保持当前输出' : '已完成 '+round+' 轮'; log($('cycle-state').textContent); }
+  } catch(error) { await fault(error); }
+  finally { if(state.cycle===token) state.cycle=null; controls(); }
+}
+$('connect').onclick=connect; $('refresh').onclick=()=>{if(!state.cycle) busy(async()=>{showStatus(await state.relay.read());log('状态已刷新');});};
+$('authorize').onclick=()=>{if(!state.relay && !state.busy) busy(async()=>{const chosen=await navigator.hid.requestDevice({filters:[{vendorId:0x16c0,productId:0x05df}]}); await listDevices(); const index=state.devices.indexOf(chosen[0]); if(index>=0) $('devices').value=String(index);});};
+$('all-on').onclick=()=>manual(null,true); $('all-off').onclick=()=>manual(null,false);
+$('mode').setAttribute('aria-checked',String(preferences.closed));
+$('mode').onclick=()=>{ if(state.busy || state.cycle) return; preferences.closed=!preferences.closed; $('mode').setAttribute('aria-checked',String(preferences.closed)); save(); if(state.report) showStatus(state.report); log('已切换为'+(preferences.closed?'常闭':'常开')+'模式，未发送开关命令'); };
+$('start').onclick=startCycle; $('stop-cycle').onclick=stopCycle;
+document.addEventListener('visibilitychange',()=>{if(document.hidden && state.cycle) {stopCycle(); log('页面已进入后台，停止循环并保持当前输出',true);}});
+window.addEventListener('pagehide',()=>{stopCycle(); if(state.relay) void state.relay.close().catch(()=>{});});
+if(!storageAvailable) log('无法读取本地设置，使用默认常开模式',true);
+if(!('hid' in navigator) || !window.isSecureContext) { $('notice').hidden=false; $('notice').textContent='当前环境无法使用 WebHID，请用 Chrome / Edge 打开此文件，或通过 HTTPS / localhost 访问。'; controls(); }
+else { navigator.hid.addEventListener('disconnect',e=>{if(state.relay?.device===e.device) void fault(new Error('USB 设备已拔出'));}); listDevices().then(controls).catch(error=>fault(error)); }
+</script>
+</body>
+</html>
