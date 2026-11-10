@@ -104,7 +104,7 @@ function save() {
 function deviceKey() { return state.relay.device.productName + '|' + state.report.serial; }
 function controls() {
   const connected = Boolean(state.relay && state.report);
-  const locked = state.busy || Boolean(state.cycle);
+  const locked = Boolean(state.cycle);
   for (const id of ['all-on','all-off','start','refresh']) $(id).disabled = !connected || locked;
   $('mode').disabled = locked;
   $('connect').disabled = locked || !('hid' in navigator);
